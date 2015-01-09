@@ -1,0 +1,728 @@
+FORMAT: 1A
+
+# TOCAT
+
+TOCAT is management operational tool that coordinate value chain in companies starting with client sales to final tools
+
+# Group Order API
+
+
+## Orders Collection [/order]
+### List all Orders [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1,  
+          "name" : "SuperClient - Project X phase1",
+          "invoiced_budget": 400.00, 
+          "allocatable_budget": 400.00, 
+          "free_budget" : 400.00, 
+          "links" : [{
+            "href" : "/order/1",
+            "rel"  : "self"
+          }]
+        }, 
+         {
+          "id": 2,  
+          "name" : "SuperClient - Project X phase1 templating", 
+          "invoiced_budget": 400.00, 
+          "allocatable_budget": 400.00, 
+          "free_budget" : 400.00, 
+          "links" : [{
+            "href" : "/order/2",
+            "rel"  : "self"
+          }]
+        }]
+
+### Create an Order [POST]
++ Request (application/json)
+
+        {
+          "invoiced_budget": 150.00, 
+          "allocatable_budget": 60.00, 
+          "name" : "SuperClient - Project X phase1", 
+          "description" : "This is just a test order for SuperClient",
+          "team":  {
+            "id" : 1
+          }
+        }
+
++ Response 201 (application/json)
+
+        { 
+            "id" : 3,
+            "links" : [{
+                "href" : "/order/3",
+                "rel"  : "self"
+            }]
+        }
+
+
+
+## Order [/order/{id}]
+A single Order object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with. 
+
+### Retrieve an Order [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 2, 
+          "invoiced_budget": 400.00, 
+          "allocatable_budget": 400.00, 
+          "free_budget" : 400.00, 
+          "name" : "SuperClient - Project X phase1 templating", 
+          "description" : "This is a SubOrder for templating work done in Team2",
+          "paid" : false,
+          "completed" : false,
+          "parent_order" : {
+            "href" : "/order/1"
+          }
+          "invoice" : {
+            "href" : "/invoice/2"
+          }
+          "links" : [{
+            "href" : "/order/2",
+            "rel"  : "self"
+          },
+          {
+            "href" : "/order/2/paid",
+            "rel"  : "setpaid"
+          },
+          {
+            "href" : "/order/2/invoice",
+            "rel"  : "invoice"
+          },
+          {
+            "href" : "/order/2/suborder",
+            "rel"  : "suborder"
+          }],
+          "team":  {
+            "name" : "Team2",
+            "href" : "/team/2"
+          }
+        }
+
+
+### Remove an Order [DELETE]
++ Response 204
+
+### Edit an Order [PATCH]
+To update an Order send a JSON with updated value for one or more of the Order resource attributes. All attributes values (states) from the previous version of this Order are carried over by default if not included in the hash. Using this action you can update only the following attributes: invoiced_budget, allocatable_budget, name, description, team
+
++ Request (application/json)
+
+        {
+          "invoiced_budget": 500.00, 
+          "allocatable_budget": 500.00, 
+          "name" : "SuperClient - Project X phase1 templating", 
+          "description" : "This is a SubOrder for templating work done in Team2",
+          "team":  {
+            "id" : 2,
+            "href" : "/team/2"
+          }
+        }
+
++ Response 204
+
+
+## Invoice relation [/order/{id}/invoice] 
+Updates an order with Invoice information. You can not change invoice when order is set as paid or completed.
+
+### Add Invoice to Order [POST]
+
++ Request (application/json)
+
+        { "invoice" : 
+            { "id" : 1; }
+        }
+        
+
++ Response 200
+
+### Remove Invoice from Order [DELETE]
+
++ Response 204
+
+## Set paid status [/order/{id}/paid] 
+
+### Mark Order as paid [POST]
+
++ Response 200
+
+### Remove paid status from Order [DELETE]
+
++ Response 204
+
+## SubOrder [/order/{id}/suborder]
+
+### Get the list of suborders [GET]
+
++ Response 200
+
+        [{
+          "id": 3,  
+          "name" : "SuperClient - Project Y phase2 system administration",
+          "links" : [{
+            "href" : "/order/3",
+            "rel"  : "self"
+          }]
+        }, 
+         {
+          "id": 4,  
+          "name" : "SuperClient - Project X phase1 templating",
+          "links" : [{
+            "href" : "/order/4",
+            "rel"  : "self"
+          }]
+        }]        
+       
+       
+### Create SubOrder aka Split order [POST]
+
++ Request (application/json)
+
+        {
+            "allocated_budget" : 100,
+            "team" : {
+                "id" : 4
+            }
+        }
+
++ Response 201
+    
+        { 
+            "id" : 5,
+            "links" : [{
+                "href" : "/order/5",
+                "rel"  : "self"
+            }]
+        }
+
+# Group Task API
+
+## Tasks Collection [/tasks]
+### List all Tasks [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1,  
+          "external_id" : "OPS-122",
+          "links" : [{
+            "href" : "/task/1",
+            "rel"  : "self"
+          },
+          {
+            "href" : "http://jira.opsway.com/browse/OPS-122",
+            "rel"  : "external"
+          }]
+        }, 
+         {
+          "id": 2,  
+          "external_id" : "OPS-123",
+          "links" : [{
+            "href" : "/task/2",
+            "rel"  : "self"
+          },
+          {
+            "href" : "http://jira.opsway.com/browse/OPS-123",
+            "rel"  : "external"
+          }]
+        }]
+
+### Create a Task [POST]
++ Request (application/json)
+
+        {
+          "external_id" : "OPS-126"
+        }
+
++ Response 201 (application/json)
+
+        { 
+            "id" : 5,
+            "links" : [{
+            "href" : "/task/5",
+            "rel"  : "self"
+          },
+          {
+            "href" : "http://jira.opsway.com/browse/OPS-126",
+            "rel"  : "external"
+          }]
+        }
+
+## Task [/task/{id}]
+A single Task object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with. 
+
+### Retrieve an Task [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 5, 
+          "external_id": "OPS-126", 
+          "budget": 100.00, 
+          "paid" : false,
+          "accepted" : true,
+          "resolver" : {
+            "name" : "Alexander Gornov",
+            "href" : "/user/10",
+            "id" : 10
+          },
+          "links" : [{
+            "href" : "/task/5",
+            "rel"  : "self"
+          },
+          {
+            "href" : "/task/5/accept",
+            "rel"  : "accept"
+          },
+          {
+            "href" : "/task/5/resolver",
+            "rel"  : "resolver"
+          },
+          {
+            "href" : "/task/5/budget",
+            "rel"  : "budget"
+          }
+          ],
+          "team":  {
+            "name" : "Team2",
+            "href" : "/team/2"
+          }
+        }
+
+### Remove an Task [DELETE]
++ Response 204
+
+## Accept an Task [/task/{id}/accept] 
+
+### Set accepted status in Task [POST]
+
++ Response 200
+
+### Remove accepted status from Task [DELETE]
+
++ Response 204
+
+
+## Task Resolver [/task/{id}/resolver] 
+
+### Set resolver in Task [POST]
+
++ Request (application/json)
+
+        {
+            "id" : 9
+        }
+
++ Response 200
+
+### Remove resolver from Task [DELETE]
+
++ Response 204
+
+## Task Budget [/task/{id}/budget] 
+
+### Set budget in Task [POST]
+Updates task budgets, putting its individual budgets from order as supplied. Budget information is complete overwritten when action is called
+
++ Request (application/json)
+
+        {[
+            { 
+              "order_id" : 2,
+              "budget"   : 10
+            },
+            { 
+              "order_id" : 3,
+              "budget"   : 5
+            },
+            { 
+              "order_id" : 5,
+              "budget"   : 11
+            }
+        ]}
+
++ Response 200
+
+### Get budgets for Task [GET]
+
++ Request (application/json)
+
+        {[
+            { 
+              "order_id" : 2,
+              "budget"   : 10
+            },
+            { 
+              "order_id" : 3,
+              "budget"   : 5
+            },
+            { 
+              "order_id" : 5,
+              "budget"   : 11
+            }
+        ]}
+
++ Response 200
+
+## Task Orders [/task/{id}/orders] 
+
+### Set budget in Task [GET]
++ Request (application/json)
+
+        [{
+          "id": 1,  
+          "name" : "SuperClient - Project X phase1",
+          "invoiced_budget": 400.00, 
+          "allocatable_budget": 400.00, 
+          "free_budget" : 400.00, 
+          "links" : [{
+            "href" : "/order/1",
+            "rel"  : "self"
+          }]
+        }, 
+         {
+          "id": 2,  
+          "name" : "SuperClient - Project X phase1 templating", 
+          "invoiced_budget": 400.00, 
+          "allocatable_budget": 400.00, 
+          "free_budget" : 400.00, 
+          "links" : [{
+            "href" : "/order/2",
+            "rel"  : "self"
+          }]
+        }]
+
++ Response 200
+
+# Group Invoice API
+
+## Invoice Collection [/invoices]
+### List all Invoices [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1,  
+          "links" : [{
+            "href" : "/invoice/1",
+            "rel"  : "self"
+          }]
+        }, 
+         {
+          "id": 2,  
+          "links" : [{
+            "href" : "/invoice/2",
+            "rel"  : "self"
+          }]
+        }]
+
+### Create an Invoice [POST]
++ Request (application/json)
+
+        {
+          "external_id" : "67899000000303001",
+          "client"      : "Hamburger Ltd"
+        }
+
++ Response 201 (application/json)
+
+        { 
+            "id" : 5,
+            "links" : [{
+            "href" : "/invoice/5",
+            "rel"  : "self"
+          }]
+        }
+
+## Invoice [/invoice/{id}]
+A single Invoice object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with. 
+
+### Retrieve an Invoice [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 5, 
+          "external_id" : "67899000000303001",
+          "client"      : "Hamburger Ltd",
+          "paid" : false,
+          "links" : [{
+            "href" : "/invoice/5",
+            "rel"  : "self"
+          },
+          {
+            "href" : "/task/5/paid",
+            "rel"  : "paid"
+          }]
+        }
+
+### Remove an Invoice [DELETE]
++ Response 204
+
+## Set paid status [/invoice/{id}/paid] 
+
+### Mark Invoice as paid [POST]
+
++ Response 200
+
+### Remove paid status from Invoice [DELETE]
+
++ Response 204
+
+# Group Transaction API
+
+## Transaction Collection [/transactions]
+### List all Transactions [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1,  
+          "links" : [{
+            "href" : "/transaction/1",
+            "rel"  : "self"
+          }]
+        }, 
+         {
+          "id": 2,  
+          "links" : [{
+            "href" : "/transaction/2",
+            "rel"  : "self"
+          }]
+        }]
+
+## Transaction [/transaction/{id}]
+A single Transaction object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+
+### Retrieve a Transaction [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 5, 
+          "timestamp" : "1420675200",
+          "account" : {
+            "id" : 4
+          },
+          "total" : -10.25
+        }
+
+# Group User API
+
+## User Collection [/users]
+### List all Users [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1,  
+          "links" : [{
+            "href" : "/user/1",
+            "rel"  : "self"
+          }]
+        }, 
+         {
+          "id": 2,  
+          "links" : [{
+            "href" : "/user/2",
+            "rel"  : "self"
+          }]
+        }]
+
+## User [/user/{id}]
+A single User object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+
+### Retrieve an User [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 5, 
+          "name" : "John Doe",
+          "balance_account" : {
+            "id" : 4
+          },
+          "income_account" : {
+            "id" : 5
+          }, 
+          "links" : [{
+            "href" : "/user/5/balance",
+            "rel"  : "balance"
+          },
+          {
+            "href" : "/user/5/income",
+            "rel"  : "income"
+          }],
+          "team" : {
+            "id" : 2,
+            "href" : "/team/2"
+          }
+        }
+        
+## Payment account [/user/{id}/payment]
+A single User object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+
+### Retrieve transactions [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 5, 
+          "balance" : 20,
+          "transactions" : [
+              {
+                "id": 1,
+                "links": [
+                  {
+                    "href": "/transaction/1",
+                    "rel": "self"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "links": [
+                  {
+                    "href": "/transaction/2",
+                    "rel": "self"
+                  }
+                ]
+              }
+            ]   
+        }
+        
+## Balance account [/user/{id}/balance]
+A single User object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+
+### Retrieve transactions [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 5, 
+          "balance" : 20,
+          "transactions" : [
+              {
+                "id": 1,
+                "links": [
+                  {
+                    "href": "/transaction/1",
+                    "rel": "self"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "links": [
+                  {
+                    "href": "/transaction/2",
+                    "rel": "self"
+                  }
+                ]
+              }
+            ]   
+        }                
+
+# Group Team API
+
+## Team Collection [/teams]
+### List all Teams [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1,  
+          "links" : [{
+            "href" : "/team/1",
+            "rel"  : "self"
+          }]
+        }, 
+         {
+          "id": 2,  
+          "links" : [{
+            "href" : "/team/2",
+            "rel"  : "self"
+          }]
+        }]
+
+## Team [/team/{id}]
+A single Team object with all its details
+
++ Parameters
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+
+### Retrieve an Team [GET]
+
++ Response 200 (application/json)
+
+        {
+          "id": 3, 
+          "name" : "Templaing 1",
+          "balance_account" : {
+            "id" : 6
+          },
+          "income_account" : {
+            "id" : 7
+          }, 
+          "links" : [{
+            "href" : "/team/3/balance",
+            "rel"  : "balance"
+          },
+          {
+            "href" : "/team/3/income",
+            "rel"  : "income"
+          }]
+        }
+
+
+# Group ERRORS
+
+API returns the following HTTP error codes
+
+ - HTTP 401 Unauthorized request
+ - HTTP 402 Failed request
+ - HTTP 403 Forbidden
+ - HTTP 405 Method not allowed
+ 
+In case of error, API returns error name and additional information in the following form
+
+{
+    "name" : "OTHER_TEAM_ORDER",
+    "description" : "Order is assigned to another team, you are not allowed to change it"}
+}
+ 
+
+List of errors
+
++ ORDER_COMPLETED
+
+    "Order is already set as completed, you can not set or change its properties"
+
++ OTHER_TEAM_ORDER
+
+    "This is not your team's order. You do not have permissions to update it"
+    
++ ORDER_VALIDATION_FAILED
+
+    "Order name can not be empty"
+    "Check invoiced and allocatable budgets. Allocatable budget should be less or equal to invoiced. Both budgets should not be empty and invoiced budget should be greater than zero"
