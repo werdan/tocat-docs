@@ -49,12 +49,27 @@ TOCAT is management operational tool that coordinate value chain in companies st
 
 + Response 201 (application/json)
 
-        { 
-            "id" : 3,
-            "links" : [{
-                "href" : "/order/3",
-                "rel"  : "self"
-            }]
+        {
+            "id": 1,
+            "invoiced_budget": "100.0",
+            "allocatable_budget": "90.0",
+            "free_budget": "10.0",
+            "name": "Test order",
+            "description": null,
+            "paid": false,
+            "completed": false,
+            "parent_order": { },
+            "invoice": { },
+            "links": {
+                "id": 1,
+                "href": "/v1/order/1",
+                "rel": "self"
+            },
+            "team": {
+                "name": "Test Team",
+                "href": "/v1/team/1",
+                "id": 1
+            }
         }
 
 
@@ -487,14 +502,16 @@ A single Invoice object with all its details
 + Response 200 (application/json)
 
         [{
-          "id": 1,  
+          "id": 1, ,
+          "comment": "123",
           "links" : [{
             "href" : "/transaction/1",
             "rel"  : "self"
           }]
         }, 
          {
-          "id": 2,  
+          "id": 2,
+          "comment": "123",
           "links" : [{
             "href" : "/transaction/2",
             "rel"  : "self"
@@ -512,12 +529,15 @@ A single Transaction object with all its details
 + Response 200 (application/json)
 
         {
-          "id": 5, 
-          "timestamp" : "1420675200",
-          "account" : {
-            "id" : 4
-          },
-          "total" : -10.25
+            "id": 1,
+            "timestamp": 1421333947,
+            "account": {
+                "id": 3,
+                "type": "balance"
+            },
+            "total": "10.0",
+            "comment": "123",
+            "user_id": 1
         }
 
 # Group User API
@@ -527,18 +547,32 @@ A single Transaction object with all its details
 + Response 200 (application/json)
 
         [{
-          "id": 1,  
-          "links" : [{
-            "href" : "/user/1",
-            "rel"  : "self"
-          }]
-        }, 
-         {
-          "id": 2,  
-          "links" : [{
-            "href" : "/user/2",
-            "rel"  : "self"
-          }]
+            "id": 1,
+            "name": "Test",
+            "login": "usr",
+            "team": {
+                "name": "Test Team",
+                "href": "/v1/team/1"
+            },
+            "role": "Manager",
+            "links": {
+                "href": "/v1/user/1",
+                "rel": "self"
+            }
+        },
+        {
+            "id": 2,
+            "name": "Test",
+            "login": "usr",
+            "team": {
+                "name": "Test Team",
+                "href": "/v1/team/1"
+            },
+            "role": "Manager",
+            "links": {
+                "href": "/v1/user/1",
+                "rel": "self"
+            }
         }]
 
 ## User [/user/{id}]
@@ -552,26 +586,27 @@ A single User object with all its details
 + Response 200 (application/json)
 
         {
-          "id": 5, 
-          "name" : "John Doe",
-          "balance_account" : {
-            "id" : 4
-          },
-          "income_account" : {
-            "id" : 5
-          }, 
-          "links" : [{
-            "href" : "/user/5/balance",
-            "rel"  : "balance"
-          },
-          {
-            "href" : "/user/5/income",
-            "rel"  : "income"
-          }],
-          "team" : {
-            "id" : 2,
-            "href" : "/team/2"
-          }
+            "id": 1,
+            "name": "Test",
+            "login": "usr",
+            "team": {
+                "name": "Test Team",
+                "href": "/v1/team/1"
+            },
+            "daily_rate": "54.3",
+            "role": "Manager",
+            "links": {
+                "href": "/v1/user/1",
+                "rel": "self"
+            },
+            "balance_account": {
+                "id": 3,
+                "href": "/v1/user/1/balance"
+            },
+            "income_account": {
+                "id": 4,
+                "href": "/v1/user/1/income"
+            }
         }
         
 ## Payment account [/user/{id}/payment]
@@ -585,28 +620,45 @@ A single User object with all its details
 + Response 200 (application/json)
 
         {
-          "id": 5, 
-          "balance" : 20,
-          "transactions" : [
-              {
-                "id": 1,
-                "links": [
-                  {
-                    "href": "/transaction/1",
-                    "rel": "self"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "links": [
-                  {
-                    "href": "/transaction/2",
-                    "rel": "self"
-                  }
-                ]
-              }
-            ]   
+            "id": 3,
+            "type": "payment",
+            "balance": "210.21",
+            "parent": {
+                "type": "User",
+                "id": 1
+            },
+            "transactions": [
+                {
+                    "id": 1,
+                    "total": "10.0",
+                    "comment": "123",
+                    "user": {
+                        "id": 1,
+                        "name": "Test",
+                        "role": "Manager"
+                    }
+                },
+                {
+                    "id": 2,
+                    "total": "100.0",
+                    "comment": "12",
+                    "user": {
+                        "id": 1,
+                        "name": "Test",
+                        "role": "Manager"
+                    }
+                },
+                {
+                    "id": 3,
+                    "total": "100.21",
+                    "comment": "12 yufk",
+                    "user": {
+                        "id": 1,
+                        "name": "Test",
+                        "role": "Manager"
+                    }
+                }
+            ]
         }
         
 ## Balance account [/user/{id}/balance]
@@ -620,29 +672,46 @@ A single User object with all its details
 + Response 200 (application/json)
 
         {
-          "id": 5, 
-          "balance" : 20,
-          "transactions" : [
-              {
-                "id": 1,
-                "links": [
-                  {
-                    "href": "/transaction/1",
-                    "rel": "self"
-                  }
-                ]
-              },
-              {
-                "id": 2,
-                "links": [
-                  {
-                    "href": "/transaction/2",
-                    "rel": "self"
-                  }
-                ]
-              }
-            ]   
-        }                
+            "id": 3,
+            "type": "balance",
+            "balance": "210.21",
+            "parent": {
+                "type": "User",
+                "id": 1
+            },
+            "transactions": [
+                {
+                    "id": 1,
+                    "total": "10.0",
+                    "comment": "123",
+                    "user": {
+                        "id": 1,
+                        "name": "Test",
+                        "role": "Manager"
+                    }
+                },
+                {
+                    "id": 2,
+                    "total": "100.0",
+                    "comment": "12",
+                    "user": {
+                        "id": 1,
+                        "name": "Test",
+                        "role": "Manager"
+                    }
+                },
+                {
+                    "id": 3,
+                    "total": "100.21",
+                    "comment": "12 yufk",
+                    "user": {
+                        "id": 1,
+                        "name": "Test",
+                        "role": "Manager"
+                    }
+                }
+            ]
+        }              
 
 # Group Team API
 
@@ -651,18 +720,22 @@ A single User object with all its details
 + Response 200 (application/json)
 
         [{
-          "id": 1,  
-          "links" : [{
-            "href" : "/team/1",
-            "rel"  : "self"
-          }]
-        }, 
-         {
-          "id": 2,  
-          "links" : [{
-            "href" : "/team/2",
-            "rel"  : "self"
-          }]
+            "id": 1,
+            "name": "Test Team",
+            "links": {
+                "id": 1,
+                "href": "/v1/team/1",
+                "rel": "self"
+            }
+        },    
+        {
+            "id": 1,
+            "name": "Test Team",
+            "links": {
+                "id": 1,
+                "href": "/v1/team/1",
+                "rel": "self"
+            }
         }]
 
 ## Team [/team/{id}]
@@ -676,22 +749,28 @@ A single Team object with all its details
 + Response 200 (application/json)
 
         {
-          "id": 3, 
-          "name" : "Templaing 1",
-          "balance_account" : {
-            "id" : 6
-          },
-          "income_account" : {
-            "id" : 7
-          }, 
-          "links" : [{
-            "href" : "/team/3/balance",
-            "rel"  : "balance"
-          },
-          {
-            "href" : "/team/3/income",
-            "rel"  : "income"
-          }]
+            "id": 1,
+            "name": "Test Team",
+            "balance_account": {
+                "id": 1,
+                "balance": "0.0",
+                "href": "/v1/team/1/balance"
+            },
+            "income_account": {
+                "id": 2,
+                "balance": "0.0",
+                "href": "/v1/team/1/income"
+            },
+            "links": [
+                {
+                "href": "/v1/team/1/balance",
+                "rel": "balance"
+                },
+                {
+                "href": "/v1/team/1/income",
+                "rel": "income"
+                }
+            ]
         }
 
 
