@@ -503,7 +503,13 @@ A single Invoice object with all its details
 
         [{
           "id": 1, ,
-          "comment": "123",
+          "comment": "122 Balance payment",
+          "total": "20.0",
+          "owner": {
+                "id": 3,
+                "type": "user"
+                "href" : "/user/3"
+          },
           "links" : [{
             "href" : "/transaction/1",
             "rel"  : "self"
@@ -512,6 +518,12 @@ A single Invoice object with all its details
          {
           "id": 2,
           "comment": "123",
+          "total": "10.0",
+          "owner": {
+                "id": 3,
+                "type": "user"
+                "href" : "/user/3"
+          },
           "links" : [{
             "href" : "/transaction/2",
             "rel"  : "self"
@@ -531,13 +543,13 @@ A single Transaction object with all its details
         {
             "id": 1,
             "timestamp": 1421333947,
-            "account": {
+            "owner": {
                 "id": 3,
-                "type": "balance"
+                "type": "user"
+                "href" : "/user/3"
             },
             "total": "10.0",
-            "comment": "123",
-            "user_id": 1
+            "comment": "123"
         }
 
 # Group User API
