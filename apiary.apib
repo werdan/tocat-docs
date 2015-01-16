@@ -260,13 +260,13 @@ Updates an order with Invoice information. You can not change invoice when order
         { 
             "id" : 5,
             "links" : [{
-            "href" : "/task/5",
-            "rel"  : "self"
-          },
-          {
-            "href" : "http://jira.opsway.com/browse/OPS-126",
-            "rel"  : "external"
-          }]
+                "href" : "/task/5",
+                "rel"  : "self"
+            },
+            {
+                "href" : "http://jira.opsway.com/browse/OPS-126",
+                "rel"  : "external"
+            }]
         }
 
 ## Task [/task/{id}]
@@ -452,8 +452,8 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
         { 
             "id" : 5,
             "links" : [{
-            "href" : "/invoice/5",
-            "rel"  : "self"
+                "href" : "/invoice/5",
+                "rel"  : "self"
           }]
         }
 
@@ -475,10 +475,6 @@ A single Invoice object with all its details
           "links" : [{
             "href" : "/invoice/5",
             "rel"  : "self"
-          },
-          {
-            "href" : "/task/5/paid",
-            "rel"  : "paid"
           }]
         }
 
@@ -499,6 +495,7 @@ A single Invoice object with all its details
 
 ## Transaction Collection [/transactions]
 ### List all Transactions [GET]
+
 + Response 200 (application/json)
 
         [{
