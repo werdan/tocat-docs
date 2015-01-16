@@ -611,119 +611,14 @@ A single User object with all its details
                 "href": "/v1/user/1",
                 "rel": "self"
             },
-            "balance_account": {
-                "id": 3,
-                "href": "/v1/user/1/balance"
+            "balance_account_state": {
+                "total": 31.22
             },
-            "income_account": {
-                "id": 4,
-                "href": "/v1/user/1/income"
+            "income__account_state": {
+                "total" : -123.12
             }
         }
         
-## Payment account [/user/{id}/payment]
-A single User object with all its details
-
-+ Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
-
-### Retrieve transactions [GET]
-
-+ Response 200 (application/json)
-
-        {
-            "id": 3,
-            "type": "payment",
-            "balance": "210.21",
-            "parent": {
-                "type": "User",
-                "id": 1
-            },
-            "transactions": [
-                {
-                    "id": 1,
-                    "total": "10.0",
-                    "comment": "123",
-                    "user": {
-                        "id": 1,
-                        "name": "Test",
-                        "role": "Manager"
-                    }
-                },
-                {
-                    "id": 2,
-                    "total": "100.0",
-                    "comment": "12",
-                    "user": {
-                        "id": 1,
-                        "name": "Test",
-                        "role": "Manager"
-                    }
-                },
-                {
-                    "id": 3,
-                    "total": "100.21",
-                    "comment": "12 yufk",
-                    "user": {
-                        "id": 1,
-                        "name": "Test",
-                        "role": "Manager"
-                    }
-                }
-            ]
-        }
-        
-## Balance account [/user/{id}/balance]
-A single User object with all its details
-
-+ Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
-
-### Retrieve transactions [GET]
-
-+ Response 200 (application/json)
-
-        {
-            "id": 3,
-            "type": "balance",
-            "balance": "210.21",
-            "parent": {
-                "type": "User",
-                "id": 1
-            },
-            "transactions": [
-                {
-                    "id": 1,
-                    "total": "10.0",
-                    "comment": "123",
-                    "user": {
-                        "id": 1,
-                        "name": "Test",
-                        "role": "Manager"
-                    }
-                },
-                {
-                    "id": 2,
-                    "total": "100.0",
-                    "comment": "12",
-                    "user": {
-                        "id": 1,
-                        "name": "Test",
-                        "role": "Manager"
-                    }
-                },
-                {
-                    "id": 3,
-                    "total": "100.21",
-                    "comment": "12 yufk",
-                    "user": {
-                        "id": 1,
-                        "name": "Test",
-                        "role": "Manager"
-                    }
-                }
-            ]
-        }              
 
 # Group Team API
 
@@ -763,28 +658,15 @@ A single Team object with all its details
         {
             "id": 1,
             "name": "Test Team",
-            "balance_account": {
-                "id": 1,
-                "balance": "0.0",
-                "href": "/v1/team/1/balance"
+            "balance__account_state": {
+                "total": "120.0"
             },
-            "income_account": {
-                "id": 2,
-                "balance": "0.0",
-                "href": "/v1/team/1/income"
-            },
-            "links": [
-                {
-                "href": "/v1/team/1/balance",
-                "rel": "balance"
-                },
-                {
-                "href": "/v1/team/1/income",
-                "rel": "income"
-                }
-            ]
+            "income__account_state": {
+                "total": "-10.31"
+            }
         }
 
+    
 
 # Group ERRORS
 
