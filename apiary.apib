@@ -51,24 +51,9 @@ TOCAT is management operational tool that coordinate value chain in companies st
 
         {
             "id": 1,
-            "invoiced_budget": "100.0",
-            "allocatable_budget": "90.0",
-            "free_budget": "10.0",
-            "name": "Test order",
-            "description": null,
-            "paid": false,
-            "completed": false,
-            "parent_order": { },
-            "invoice": { },
             "links": {
-                "id": 1,
                 "href": "/v1/order/1",
                 "rel": "self"
-            },
-            "team": {
-                "name": "Test Team",
-                "href": "/v1/team/1",
-                "id": 1
             }
         }
 
@@ -94,11 +79,18 @@ A single Order object with all its details
           "paid" : false,
           "completed" : false,
           "parent_order" : {
+            "id"   : 1,
             "href" : "/order/1"
           }
           "invoice" : {
+            "id"   : 2,
             "href" : "/invoice/2"
-          }
+          },
+          "team":  {
+            "id"   : 2,
+            "name" : "Team2",
+            "href" : "/team/2"
+          },
           "links" : [{
             "href" : "/order/2",
             "rel"  : "self"
@@ -114,11 +106,7 @@ A single Order object with all its details
           {
             "href" : "/order/2/suborder",
             "rel"  : "suborder"
-          }],
-          "team":  {
-            "name" : "Team2",
-            "href" : "/team/2"
-          }
+          }]
         }
 
 
