@@ -190,6 +190,7 @@ Updates an order with Invoice information. You can not change invoice when order
 
         {
             "allocated_budget" : 100,
+            "name" : "SubOrder on SuperClient phase2",
             "team" : {
                 "id" : 4
             }
@@ -668,15 +669,13 @@ In case of error, API returns error name and additional information in the follo
 
 List of errors
 
-+ ORDER_COMPLETED
-
-    "Order is already set as completed, you can not set or change its properties"
-
-+ OTHER_TEAM_ORDER
-
-    "This is not your team's order. You do not have permissions to update it"
-    
-+ ORDER_VALIDATION_FAILED
-
++ ORDER_ERROR
+    "Order name can not be empty"
+    "Allocatable budget can not be empty"
     "Order name can not be empty"
     "Check invoiced and allocatable budgets. Allocatable budget should be less or equal to invoiced. Both budgets should not be empty and invoiced budget should be greater than zero"
+    "Suborder can not be created from another suborder"
+    "Suborder can not be invoiced more than parent free budget"
+    "Suborder can not be created for the same team as parent order"
+    "Order is already set as completed, you can not set or change its properties"
+    "This is not your team's order. You do not have permissions to update it"
