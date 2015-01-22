@@ -356,7 +356,7 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 
 + Request (application/json)
 
-        {[
+        {'budget' : [
             { 
               "order_id" : 2,
               "budget"   : 10
@@ -378,28 +378,30 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 ### Set budget in Task [GET]
 + Request (application/json)
 
-        [{
-          "id": 1,  
-          "name" : "SuperClient - Project X phase1",
-          "invoiced_budget": 400.00, 
-          "allocatable_budget": 400.00, 
-          "free_budget" : 400.00, 
-          "links" : [{
-            "href" : "/order/1",
-            "rel"  : "self"
-          }]
-        }, 
-         {
-          "id": 2,  
-          "name" : "SuperClient - Project X phase1 templating", 
-          "invoiced_budget": 400.00, 
-          "allocatable_budget": 400.00, 
-          "free_budget" : 400.00, 
-          "links" : [{
-            "href" : "/order/2",
-            "rel"  : "self"
-          }]
-        }]
+        {
+            'budget' : [{
+              "id": 1,  
+              "name" : "SuperClient - Project X phase1",
+              "invoiced_budget": 400.00, 
+              "allocatable_budget": 400.00, 
+              "free_budget" : 400.00, 
+              "links" : [{
+                "href" : "/order/1",
+                "rel"  : "self"
+              }]
+            }, 
+             {
+              "id": 2,  
+              "name" : "SuperClient - Project X phase1 templating", 
+              "invoiced_budget": 400.00, 
+              "allocatable_budget": 400.00, 
+              "free_budget" : 400.00, 
+              "links" : [{
+                "href" : "/order/2",
+                "rel"  : "self"
+              }]
+            }]
+        }
 
 + Response 200
 
