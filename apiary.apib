@@ -111,7 +111,7 @@ A single Order object with all its details
 
 
 ### Remove an Order [DELETE]
-+ Response 204
++ Response 200
 
 ### Edit an Order [PATCH]
 To update an Order send a JSON with updated value for one or more of the Order resource attributes. All attributes values (states) from the previous version of this Order are carried over by default if not included in the hash. Using this action you can update only the following attributes: invoiced_budget, allocatable_budget, name, description, team
@@ -129,7 +129,7 @@ To update an Order send a JSON with updated value for one or more of the Order r
           }
         }
 
-+ Response 204
++ Response 200
 
 
 ## Invoice relation [/order/{id}/invoice] 
@@ -148,7 +148,7 @@ Updates an order with Invoice information. You can not change invoice when order
 
 ### Remove Invoice from Order [DELETE]
 
-+ Response 204
++ Response 200
 
 ## Set paid status [/order/{id}/paid] 
 
@@ -158,7 +158,7 @@ Updates an order with Invoice information. You can not change invoice when order
 
 ### Remove paid status from Order [DELETE]
 
-+ Response 204
++ Response 200
 
 ## SubOrder [/order/{id}/suborder]
 
@@ -299,7 +299,7 @@ A single Task object with all its details
         }
 
 ### Remove an Task [DELETE]
-+ Response 204
++ Response 200
 
 ## Accept an Task [/task/{id}/accept] 
 
@@ -309,7 +309,7 @@ A single Task object with all its details
 
 ### Remove accepted status from Task [DELETE]
 
-+ Response 204
++ Response 200
 
 
 ## Task Resolver [/task/{id}/resolver] 
@@ -326,7 +326,7 @@ A single Task object with all its details
 
 ### Remove resolver from Task [DELETE]
 
-+ Response 204
++ Response 200
 
 ## Task Budget [/task/{id}/budget] 
 
@@ -464,7 +464,7 @@ A single Invoice object with all its details
         }
 
 ### Remove an Invoice [DELETE]
-+ Response 204
++ Response 200
 
 ## Set paid status [/invoice/{id}/paid] 
 
@@ -474,7 +474,7 @@ A single Invoice object with all its details
 
 ### Remove paid status from Invoice [DELETE]
 
-+ Response 204
++ Response 200
 
 # Group Transaction API
 
