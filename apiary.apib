@@ -139,10 +139,8 @@ Updates an order with Invoice information. You can not change invoice when order
 
 + Request (application/json)
 
-        { "invoice" : 
-            { "id" : 1; }
-        }
-        
+        { "id" : 1 }
+
 
 + Response 200
 
@@ -208,7 +206,7 @@ Updates an order with Invoice information. You can not change invoice when order
 
 # Group Task API
 
-## Tasks Collection [/tasks]
+## Tasks Collection [/task]
 ### List all Tasks [GET]
 + Response 200 (application/json)
 
@@ -407,7 +405,7 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 
 # Group Invoice API
 
-## Invoice Collection [/invoices]
+## Invoice Collection [/invoice]
 ### List all Invoices [GET]
 + Response 200 (application/json)
 
@@ -430,8 +428,7 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 + Request (application/json)
 
         {
-          "external_id" : "67899000000303001",
-          "client"      : "Hamburger Ltd"
+          "external_id" : "67899000000303001"
         }
 
 + Response 201 (application/json)
@@ -457,7 +454,6 @@ A single Invoice object with all its details
         {
           "id": 5, 
           "external_id" : "67899000000303001",
-          "client"      : "Hamburger Ltd",
           "paid" : false,
           "links" : [{
             "href" : "/invoice/5",
