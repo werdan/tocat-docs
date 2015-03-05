@@ -7,7 +7,7 @@ TOCAT is management operational tool that coordinate value chain in companies st
 # Group Order API
 
 
-## Orders Collection [/order]
+## Orders Collection [/orders]
 ### List all Orders [GET]
 + Response 200 (application/json)
 
@@ -57,7 +57,22 @@ TOCAT is management operational tool that coordinate value chain in companies st
             }
         }
 
+### Filtering on orders, available parameters
 
+  - paid - boolean
+
+### Sorting on orders, available parameters
+
+  - invoiced_budget
+  - created_at
+  - free_budget
+  - allocatable_budget
+  - name
+
+### Search on orders, available parameters
+
+  - name
+  - description
 
 ## Order [/order/{id}]
 A single Order object with all its details
@@ -106,7 +121,35 @@ A single Order object with all its details
           {
             "href" : "/order/2/suborder",
             "rel"  : "suborder"
-          }]
+          }],
+          "tasks": [
+            {
+              "id": 5,
+              "external_id": "TST-102",
+              "links": [
+                {
+                  "href": "/tasks/5",
+                  "rel": "self"
+                },
+                {
+                  "href": null,
+                  "rel": "external"
+                }
+              ]
+            }],
+          "sub_orders": [
+            {
+              "id": 7,
+              "name": "super order",
+              "invoiced_budget": "50.0",
+              "allocatable_budget": "50.0",
+              "free_budget": "50.0",
+              "links": {
+                "url": "/orders/7",
+                "rel": "self"
+              }
+            }
+          ]
         }
 
 
@@ -197,7 +240,7 @@ Updates an order with Invoice information. You can not change invoice when order
 
 # Group Task API
 
-## Tasks Collection [/task]
+## Tasks Collection [/tasks]
 ### List all Tasks [GET]
 + Response 200 (application/json)
 
@@ -247,6 +290,19 @@ Updates an order with Invoice information. You can not change invoice when order
             }]
         }
 
+### Filtering on tasks, available parameters
+
+  - paid - boolean
+
+### Sorting on tasks, available parameters
+
+  - external_id
+  - budget
+
+### Search on tasks, available parameters
+
+  - external_id
+
 ## Task [/task/{id}]
 A single Task object with all its details
 
@@ -284,6 +340,30 @@ A single Task object with all its details
             "href" : "/task/5/budget",
             "rel"  : "budget"
           }
+          ],
+          "orders": [
+            {
+              "id": 5,
+              "name": "Test",
+              "invoiced_budget": "1500.0",
+              "allocatable_budget": "1000.0",
+              "free_budget": "900.0",
+              "links": {
+                "url": "/orders/5",
+                "rel": "self"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Test2",
+              "invoiced_budget": "2000.0",
+              "allocatable_budget": "500.0",
+              "free_budget": "350.0",
+              "links": {
+                "url": "/orders/8",
+                "rel": "self"
+              }
+            }
           ]
         }
 
@@ -360,41 +440,10 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 
 + Response 200
 
-## Task Orders [/task/{id}/orders] 
-
-### Set budget in Task [GET]
-+ Request (application/json)
-
-        {
-            'budget' : [{
-              "id": 1,  
-              "name" : "SuperClient - Project X phase1",
-              "invoiced_budget": 400.00, 
-              "allocatable_budget": 400.00, 
-              "free_budget" : 400.00, 
-              "links" : [{
-                "href" : "/order/1",
-                "rel"  : "self"
-              }]
-            }, 
-             {
-              "id": 2,  
-              "name" : "SuperClient - Project X phase1 templating", 
-              "invoiced_budget": 400.00, 
-              "allocatable_budget": 400.00, 
-              "free_budget" : 400.00, 
-              "links" : [{
-                "href" : "/order/2",
-                "rel"  : "self"
-              }]
-            }]
-        }
-
-+ Response 200
 
 # Group Invoice API
 
-## Invoice Collection [/invoice]
+## Invoice Collection [/invoices]
 ### List all Invoices [GET]
 + Response 200 (application/json)
 
@@ -430,6 +479,20 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
           }]
         }
 
+### Filtering on invoices, available parameters
+
+  - paid - boolean
+
+### Sorting on invoices, available parameters
+
+  - comment
+  - client
+
+### Search on invoices, available parameters
+
+  - external_id
+  - client
+
 ## Invoice [/invoice/{id}]
 A single Invoice object with all its details
 
@@ -447,7 +510,20 @@ A single Invoice object with all its details
           "links" : [{
             "href" : "/invoice/5",
             "rel"  : "self"
-          }]
+          }],
+          "orders": [
+            {
+              "id": 15,
+              "name": "Test2",
+              "invoiced_budget": "50.0",
+              "allocatable_budget": "30.0",
+              "free_budget": "10.0",
+              "links": {
+                "url": "/orders/15",
+                "rel": "self"
+                }
+              }
+          ]
         }
 
 ### Remove an Invoice [DELETE]
@@ -473,6 +549,7 @@ A single Invoice object with all its details
         [{
           "id": 1, ,
           "comment": "122 Balance payment",
+          "type": "payment",
           "total": "20.0",
           "owner": {
                 "id": 3,
@@ -487,6 +564,7 @@ A single Invoice object with all its details
          {
           "id": 2,
           "comment": "123",
+          "type": "balance",
           "total": "10.0",
           "owner": {
                 "id": 3,
@@ -520,6 +598,20 @@ A single Transaction object with all its details
             "total": "10.0",
             "comment": "123"
         }
+
+### Filtering on transactions, available parameters
+
+  - user - int, user ID
+  - team - int, team ID
+
+### Sorting on tasks, available parameters
+
+  - total
+  - created_at
+
+### Search on transactions, available parameters
+
+  - comment
 
 # Group User API
 
@@ -659,3 +751,46 @@ List of errors
     "Suborder can not be created for the same team as parent order"
     "Order is already set as completed, you can not set or change its properties"
     "This is not your team's order. You do not have permissions to update it"
+
+
+# Group SORTING AND FILTERING
+
+Sorting and filtering is handled with URL query parameters which applies only for GET requests
+
+Filtering
+
+  - ?param=value
+
+Value can be in
+
+  - boolean (true/false/1/0)
+  - number (integer)
+
+
+Sorting is done using special parameter:
+
+  - ?sorted_by=value 
+
+Where value is parameter name that can be used for filtering on object and prepending suffixes _desc or _asc to parameter name.
+Where _desc/_asc stand for sorting direction, descending or ascending respectively. Default sorting direction is ascending.
+
+Examples:
+
+  - /orders?sorted_by=total
+  - /orders?sorted_by=free_budget_asc
+  - /tasks?sorted_by=paid_desc
+
+You can use multiple parameters to sort, which are applied in sequance
+
+  - /tasks/?sorted_by=external_id_desc,budget_asc
+
+Pagination
+
+Adding parameters limit and page, one can get a subset of results. page is counted up from 1, and object for limit parameter are counted from 1 and up.
+
+Examples:
+
+  - /tasks?paid=true&limit=10&page=4   In this case results 41-50 will be on current page
+
+
+Searching is available through parameter ?search_query=value, where value is search in a list of parameters with OR logic. List of parameters is specific for each object type (see in respective resource definitions)
