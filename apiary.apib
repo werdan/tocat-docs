@@ -720,6 +720,36 @@ A single Team object with all its details
         }
 
     
+# Group Status API
+
+## Status [/status]
+
+### Return all status resources
+
++ Response 200 (application/json)
+
+        [{
+            "name": "Selfcheck",
+            "links": {
+                "href": "/status/selfcheck"
+            }
+        }]
+
+
+## Self-check [/status/selfcheck]
+### Run a self-check [GET]
+
+Returns a list of errors found or empty response in case everything is correct
+
++ Response 200 (application/json)
+
+        {"errors" :
+         ["Incorrect number of transactions for issue 22875",
+          "Order 623 is expected to be paid"
+         ]   
+        }
+
+
 
 # Group ERRORS
 
