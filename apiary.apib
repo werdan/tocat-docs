@@ -7,8 +7,28 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
 # Group Order API
 
 
-## Orders Collection [/orders]
+## Orders Collection [/orders/?paid={paid_status}&sorted_by={sorted_by}&search_query={query}]
 ### List all Orders [GET]
+
+
++ Parameters
+
+    + paid (boolean) - Filtering on paid orders
+
+    + sorted_by (string) - Sorting on orders
+    
+        + Values
+        
+            + `invoiced_budget`
+            + `created_at`
+            + `free_budget`
+            + `allocatable_budget`
+            + `name`
+
+    + search_query (string) - Search on orders using name or description as a key
+
+
+
 + Response 200 (application/json)
 
         [{
@@ -57,22 +77,7 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
             }
         }
 
-### Filtering on orders, available parameters
 
-  - paid - boolean
-
-### Sorting on orders, available parameters
-
-  - invoiced_budget
-  - created_at
-  - free_budget
-  - allocatable_budget
-  - name
-
-### Search on orders, available parameters
-
-  - name
-  - description
 
 ## Order [/order/{id}]
 A single Order object with all its details
@@ -240,8 +245,23 @@ Updates an order with Invoice information. You can not change invoice when order
 
 # Group Task API
 
-## Tasks Collection [/tasks]
+## Tasks Collection [/tasks/?paid={paid_status}&sorted_by={sorted_by}&search_query={query}]
 ### List all Tasks [GET]
+
++ Parameters
+
+    + paid (boolean) - Filtering on paid tasks
+
+    + sorted_by (string) - Sorting on tasks
+    
+        + Values
+        
+            + `external_id`
+            + `budget`
+
+    + search_query (string) - Search on tasks using external_id as a key
+
+
 + Response 200 (application/json)
 
         [{
@@ -290,18 +310,6 @@ Updates an order with Invoice information. You can not change invoice when order
             }]
         }
 
-### Filtering on tasks, available parameters
-
-  - paid - boolean
-
-### Sorting on tasks, available parameters
-
-  - external_id
-  - budget
-
-### Search on tasks, available parameters
-
-  - external_id
 
 ## Task [/task/{id}]
 A single Task object with all its details
@@ -443,8 +451,24 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 
 # Group Invoice API
 
-## Invoice Collection [/invoices]
+## Invoice Collection [/invoices/?paid={paid_status}&sorted_by={sorted_by}&search_query={query}]
 ### List all Invoices [GET]
+
+
++ Parameters
+
+    + paid (boolean) - Filtering on paid invoices
+
+    + sorted_by (string) - Sorting on invoices
+    
+        + Values
+        
+            + `comment`
+            + `client`
+
+    + search_query (string) - Search on invoices using external_id OR client as a key
+
+
 + Response 200 (application/json)
 
         [{
@@ -478,20 +502,6 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
                 "rel"  : "self"
           }]
         }
-
-### Filtering on invoices, available parameters
-
-  - paid - boolean
-
-### Sorting on invoices, available parameters
-
-  - comment
-  - client
-
-### Search on invoices, available parameters
-
-  - external_id
-  - client
 
 ## Invoice [/invoice/{id}]
 A single Invoice object with all its details
@@ -541,8 +551,23 @@ A single Invoice object with all its details
 
 # Group Transaction API
 
-## Transaction Collection [/transactions]
+## Transaction Collection [/transactions?user={user_id}&team={team_id}&sorted_by={sorted_by}&search_query={query}]
 ### List all Transactions [GET]
+
++ Parameters
+
+    + user (int) - Filtering by user id
+    + team (int) - Filtering by team id
+
+    + sorted_by (string) - Sorting on tasks
+    
+        + Values
+        
+            + `total`
+            + `created_at`
+
+    + search_query (string) - Search on tasks using comment as a key
+
 
 + Response 200 (application/json)
 
@@ -599,19 +624,6 @@ A single Transaction object with all its details
             "comment": "123"
         }
 
-### Filtering on transactions, available parameters
-
-  - user - int, user ID
-  - team - int, team ID
-
-### Sorting on tasks, available parameters
-
-  - total
-  - created_at
-
-### Search on transactions, available parameters
-
-  - comment
 
 # Group User API
 
