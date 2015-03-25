@@ -422,9 +422,14 @@ A single Task object with all its details
 ### Set budget in Task [POST]
 Updates task budgets, putting its individual budgets from order as supplied. Budget information is complete overwritten when action is called
 
++ Parameters
+    + budget
+
+
 + Request (application/json)
 
-        {[
+        {'budget' : [
+        
             { 
               "order_id" : 2,
               "budget"   : 10
