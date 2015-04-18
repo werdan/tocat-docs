@@ -196,7 +196,7 @@ Updates an order with Invoice information. You can not change invoice when order
 + Response 200
 
 ## Complete order [/order/{id}/complete] 
-Set order as completed, closing it for further changes and creating transaction in team payment account
+Set order as completed, closing it for further changes and creating transaction in team income account
 
 ### Complete order [POST]
 
@@ -255,7 +255,7 @@ Set order as completed, closing it for further changes and creating transaction 
 
 # Group Task API
 
-## Tasks Collection [/tasks/?paid={paid_status}&sorted_by={sorted_by}&search_query={query}]
+## Tasks Collection [/tasks/?budget={budget}&accepted={accepted}&resolver={resolver}&paid={paid_status}&sorted_by={sorted_by}&order={order}&search_query={query}&search_query={search_query}]
 ### List all Tasks [GET]
 
 + Parameters
@@ -266,6 +266,8 @@ Set order as completed, closing it for further changes and creating transaction 
     + resolver (int) - resolver user id
     + order (int) - order id  
 
+    + search_query (string) - Search on tasks using external_id as a key
+    
     + sorted_by (string) - Sorting on tasks
     
         + Values
@@ -273,7 +275,7 @@ Set order as completed, closing it for further changes and creating transaction 
             + `external_id`
             + `budget`
 
-    + search_query (string) - Search on tasks using external_id as a key
+
 
 
 + Response 200 (application/json)
@@ -470,13 +472,15 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 
 # Group Invoice API
 
-## Invoice Collection [/invoices/?paid={paid_status}&sorted_by={sorted_by}&search_query={query}]
+## Invoice Collection [/invoices/?paid={paid_status}&sorted_by={sorted_by}&search_query={search_query}]
 ### List all Invoices [GET]
 
 
 + Parameters
 
     + paid (boolean) - Filtering on paid invoices
+
+    + search_query (string) - Search on invoices using external_id OR client as a key
 
     + sorted_by (string) - Sorting on invoices
     
@@ -485,7 +489,6 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
             + `comment`
             + `client`
 
-    + search_query (string) - Search on invoices using external_id OR client as a key
 
 
 + Response 200 (application/json)
