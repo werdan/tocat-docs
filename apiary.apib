@@ -13,27 +13,27 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
 
 + Parameters
 
-    + sorted_by (string) - Sorting on orders
-        + Members
-            + `invoiced_budget:(asc/desc)`
-            + `created_at:(asc/desc)`
-            + `free_budget:(asc/desc)`
-            + `allocatable_budget:(asc/desc)`
-            + `name:(asc/desc)`
-            + `description:(asc/desc)`
+  + sorted_by (string) - Sorting on orders
+      + Members
+          + `invoiced_budget:(asc/desc)`
+          + `created_at:(asc/desc)`
+          + `free_budget:(asc/desc)`
+          + `allocatable_budget:(asc/desc)`
+          + `name:(asc/desc)`
+          + `description:(asc/desc)`
 
-    + search (string) - Search on orders using name or description as a key
-        + Members
-            + `name`
-            + `description`
-            + `invoiced_budget`
-            + `allocatable_budget`
-            + `free_budget`
-            + `paid`
-            + `completed`
-            + `team`
-            + `parent_id`
-            + `invoice_id`
+  + search (string) - Search on orders using name or description as a key
+      + Members
+          + `name`
+          + `description`
+          + `invoiced_budget`
+          + `allocatable_budget`
+          + `free_budget`
+          + `paid`
+          + `completed`
+          + `team` - Only explicit search.
+          + `parent_id` - Only explicit search.
+          + `invoice_id` - Only explicit search.
 
 
 + Response 200 (application/json)
@@ -57,7 +57,7 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
             "url": "/order/1",
             "rel": "self"
           }
-         }, 
+         },
          {
           "id": 2,
           "name": "Test!",
@@ -87,9 +87,9 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
 + Request (application/json)
 
         {
-          "invoiced_budget": 150.00, 
-          "allocatable_budget": 60.00, 
-          "name" : "SuperClient - Project X phase1", 
+          "invoiced_budget": 150.00,
+          "allocatable_budget": 60.00,
+          "name" : "SuperClient - Project X phase1",
           "description" : "This is just a test order for SuperClient",
           "team":  {
             "id" : 1
@@ -109,23 +109,22 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
         }
 
 
-
 ## Order [/order/{id}]
 A single Order object with all its details
 
 + Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with. 
+    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with.
 
 ### Retrieve an Order [GET]
 
 + Response 200 (application/json)
 
         {
-          "id": 2, 
-          "invoiced_budget": 50.00, 
-          "allocatable_budget": 50.00, 
-          "free_budget" : 50.00, 
-          "name" : "SuperClient - Project X phase1 templating", 
+          "id": 2,
+          "invoiced_budget": 50.00,
+          "allocatable_budget": 50.00,
+          "free_budget" : 50.00,
+          "name" : "SuperClient - Project X phase1 templating",
           "description" : "This is a SubOrder for templating work done in Team2",
           "paid" : false,
           "completed" : false,
@@ -213,9 +212,9 @@ To update an Order send a JSON with updated value for one or more of the Order r
 + Request (application/json)
 
         {
-          "invoiced_budget": 500.00, 
-          "allocatable_budget": 500.00, 
-          "name" : "SuperClient - Project X phase1 templating", 
+          "invoiced_budget": 500.00,
+          "allocatable_budget": 500.00,
+          "name" : "SuperClient - Project X phase1 templating",
           "description" : "This is a SubOrder for templating work done in Team2",
           "team":  {
             "id" : 2,
@@ -226,14 +225,16 @@ To update an Order send a JSON with updated value for one or more of the Order r
 + Response 200
 
 
-## Invoice relation [/order/{id}/invoice] 
+## Invoice relation [/order/{id}/invoice]
 Updates an order with Invoice information. You can not change invoice when order is set as paid or completed.
 
 ### Add Invoice to Order [POST]
 
 + Request (application/json)
 
-        { "invoice_id" : 1 }
+        {
+          "invoice_id" : 1
+        }
 
 + Response 200
 
@@ -241,7 +242,7 @@ Updates an order with Invoice information. You can not change invoice when order
 
 + Response 200
 
-## Complete order [/order/{id}/complete] 
+## Complete order [/order/{id}/complete]
 Set order as completed, closing it for further changes and creating transaction in team income account
 
 ### Complete order [POST]
@@ -255,15 +256,15 @@ Set order as completed, closing it for further changes and creating transaction 
 
 ## SubOrder [/order/{id}/suborder]
 
-       
+
 ### Create SubOrder aka Split order [POST]
 
 + Request (application/json)
 
         {
-          "invoiced_budget": 150.00, 
-          "allocatable_budget": 60.00, 
-          "name" : "SuperClient - Project X phase1", 
+          "invoiced_budget": 150.00,
+          "allocatable_budget": 60.00,
+          "name" : "SuperClient - Project X phase1",
           "description" : "This is just a test order for SuperClient",
           "team":  {
             "id" : 1
@@ -273,65 +274,76 @@ Set order as completed, closing it for further changes and creating transaction 
         }
 
 + Response 201
-    
-        { 
-            "id" : 2,
-            "links" : [{
-                "href" : "/order/2",
-                "rel"  : "self"
-            }]
+
+        {
+          "id" : 2,
+          "links" : [{
+              "href" : "/order/2",
+              "rel"  : "self"
+          }]
         }
 
 # Group Task API
 
-## Tasks Collection [/tasks/?budget={budget}&accepted={accepted}&resolver={resolver}&paid={paid_status}&sorted_by={sorted_by}&order={order}&search_query={query}&search_query={search_query}]
+## Tasks Collection [/tasks/?sorted_by={sorted_by}&search_query={query}]
 ### List all Tasks [GET]
 
 + Parameters
-
-    + paid (boolean) - Filtering on paid tasks
-    + budget 
-    + accepted
-    + resolver (int) - resolver user id
-    + order (int) - order id  
-
-    + search_query (string) - Search on tasks using external_id as a key
-    
-    + sorted_by (string) - Sorting on tasks
-    
-        + Values
+    + search_query (string) - Search on tasks
+        + Members
+            + `name`
+            + `budget`
+            + `accepted`
+            + `paid`
+            + `resolver`
+            + `order`
         
+    + sorted_by (string) - Sorting on tasks
+        + Members
             + `external_id`
             + `budget`
-
-
-
 
 + Response 200 (application/json)
 
         [{
-          "id": 1,  
-          "external_id" : "OPS-122",
-          "links" : [{
-            "href" : "/task/1",
-            "rel"  : "self"
+          "id": 1,
+          "external_id": "50993",
+          "accepted": true,
+          "paid": false,
+          "links": [
+            {
+              "href": "/task/1",
+              "rel": "self"
+            },
+            {
+              "href": "http://yourtasksystem.com/50993",
+              "rel": "external"
+            }
+          ],
+          "budget": 10,
+          "resolver": { }
           },
           {
-            "href" : "http://jira.opsway.com/browse/OPS-122",
-            "rel"  : "external"
-          }]
-        }, 
-         {
-          "id": 2,  
-          "external_id" : "OPS-123",
-          "links" : [{
-            "href" : "/task/2",
-            "rel"  : "self"
-          },
-          {
-            "href" : "http://jira.opsway.com/browse/OPS-123",
-            "rel"  : "external"
-          }]
+          "id": 2,
+          "external_id": "9827",
+          "accepted": true,
+          "paid": false,
+          "links": [
+            {
+              "href": "/task/7834",
+              "rel": "self"
+            },
+            {
+              "href": "http://yourtasksystem.com/9827",
+              "rel": "external"
+            }
+          ],
+          "budget": 30,
+          "resolver": {
+            "name": "John Smith",
+            "href": "/user/1",
+            "id": 1
+          }
         }]
 
 ### Create a Task [POST]
@@ -343,16 +355,16 @@ Set order as completed, closing it for further changes and creating transaction 
 
 + Response 201 (application/json)
 
-        { 
-            "id" : 5,
-            "links" : [{
-                "href" : "/task/5",
-                "rel"  : "self"
-            },
-            {
-                "href" : "http://jira.opsway.com/browse/OPS-126",
-                "rel"  : "external"
-            }]
+        {
+          "id" : 5,
+          "links" : [{
+              "href" : "/task/5",
+              "rel"  : "self"
+          },
+          {
+              "href" : "http://yourtasksystem.com/OPS-126",
+              "rel"  : "external"
+          }]
         }
 
 
@@ -360,60 +372,55 @@ Set order as completed, closing it for further changes and creating transaction 
 A single Task object with all its details
 
 + Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with. 
+    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with.
 
 ### Retrieve a Task [GET]
 
 + Response 200 (application/json)
 
         {
-          "id": 5, 
-          "external_id": "OPS-126", 
-          "budget": 100.00, 
-          "paid" : false,
-          "accepted" : true,
-          "resolver" : {
-            "name" : "Alexander Gornov",
-            "href" : "/user/10",
-            "id" : 10
-          },
-          "links" : [{
-            "href" : "/task/5",
-            "rel"  : "self"
-          },
-          {
-            "href" : "/task/5/accept",
-            "rel"  : "accept"
-          },
-          {
-            "href" : "/task/5/resolver",
-            "rel"  : "resolver"
-          },
-          {
-            "href" : "/task/5/budget",
-            "rel"  : "budget"
-          }
+          "id": 1,
+          "external_id": "50993",
+          "budget": 10,
+          "paid": false,
+          "accepted": true,
+          "resolver": { },
+          "links": [
+            {
+              "href": "/task/1",
+              "rel": "self"
+            },
+            {
+              "href": "/task/1/accept",
+              "rel": "accept"
+            },
+            {
+              "href": "/task/1/resolver",
+              "rel": "resolver"
+            },
+            {
+              "href": "/task/1/budget",
+              "rel": "budget"
+            }
           ],
           "orders": [
             {
-              "id": 5,
-              "name": "Test",
-              "invoiced_budget": "1500.0",
-              "allocatable_budget": "1000.0",
-              "free_budget": "900.0",
+              "id": 4,
+              "name": "super order",
+              "invoiced_budget": "20.0",
+              "allocatable_budget": "20.0",
+              "free_budget": "10.0",
+              "suborder": true,
+              "paid": false,
+              "completed": false,
+              "team": {
+                "id": 2,
+                "name": "Team2",
+                "link": "/team/2"
+              },
+              "invoice": { },
               "links": {
-                "url": "/orders/5",
-                "rel": "self"
-              }
-            },
-            {
-              "id": 8,
-              "name": "Test2",
-              "invoiced_budget": "2000.0",
-              "allocatable_budget": "500.0",
-              "free_budget": "350.0",
-              "links": {
-                "url": "/orders/8",
+                "url": "/order/833",
                 "rel": "self"
               }
             }
@@ -421,9 +428,9 @@ A single Task object with all its details
         }
 
 
-## Accept an Task [/task/{id}/accept] 
+## Accept an Task [/task/{id}/accept]
 
-### Set accepted status in Task [POST]
+### Set accepted status in Task [POST, PUT]
 
 + Response 200
 
@@ -432,15 +439,15 @@ A single Task object with all its details
 + Response 200
 
 
-## Task Resolver [/task/{id}/resolver] 
+## Task Resolver [/task/{id}/resolver]
 
-### Set resolver in Task [POST]
+### Set resolver in Task [POST, PUT]
 
 + Request (application/json)
 
-        {
-            "id" : 9
-        }
+      {
+        "user_id" : 9
+      }
 
 + Response 200
 
@@ -448,32 +455,29 @@ A single Task object with all its details
 
 + Response 200
 
-## Task Budget [/task/{id}/budget] 
+## Task Budget [/task/{id}/budget]
 
-### Set budget in Task [POST]
+### Set budget in Task [POST, PUT]
 Updates task budgets, putting its individual budgets from order as supplied. Budget information is complete overwritten when action is called
-
-+ Parameters
-    + budget
-
 
 + Request (application/json)
 
-        {'budget' : [
-        
-            { 
+      {
+        "budget" : [
+            {
               "order_id" : 2,
               "budget"   : 10
             },
-            { 
+            {
               "order_id" : 3,
               "budget"   : 5
             },
-            { 
+            {
               "order_id" : 5,
               "budget"   : 11
             }
-        ]}
+        ]
+      }
 
 + Response 200
 
@@ -481,61 +485,72 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 
 + Request (application/json)
 
-        {'budget' : [
-            { 
-              "order_id" : 2,
-              "budget"   : 10
-            },
-            { 
-              "order_id" : 3,
-              "budget"   : 5
-            },
-            { 
-              "order_id" : 5,
-              "budget"   : 11
-            }
-        ]}
+        {
+          "budget" : [
+              {
+                "order_id" : 2,
+                "budget"   : 10
+              },
+              {
+                "order_id" : 3,
+                "budget"   : 5
+              },
+              {
+                "order_id" : 5,
+                "budget"   : 11
+              }
+          ]
+        }
 
 + Response 200
 
 
 # Group Invoice API
 
-## Invoice Collection [/invoices/?paid={paid_status}&sorted_by={sorted_by}&search_query={search_query}]
+## Invoice Collection [/invoices/?sorted_by={sorted_by}&search={search_query}]
 ### List all Invoices [GET]
-
 
 + Parameters
 
-    + paid (boolean) - Filtering on paid invoices
-
-    + search_query (string) - Search on invoices using external_id OR client as a key
+    + search (string) - Search on invoices using external_id OR client as a key
+        
+        + Members
+            
+            + `external_id`
+            + `paid`
 
     + sorted_by (string) - Sorting on invoices
-    
-        + Values
         
-            + `comment`
-            + `client`
+        + Members
+          
+          + `comment:(asc/desc)`
 
 
 
 + Response 200 (application/json)
 
-        [{
-          "id": 1,  
-          "links" : [{
-            "href" : "/invoice/1",
-            "rel"  : "self"
-          }]
-        }, 
-         {
-          "id": 2,  
-          "links" : [{
-            "href" : "/invoice/2",
-            "rel"  : "self"
-          }]
-        }]
+        [
+          {
+            "id": 1,
+            "external_id": "6536",
+            "total": "1504.0",
+            "paid": false,
+            "links": {
+              "href": "/invoice/1",
+              "rel": "self"
+            }
+          },
+          {
+            "id": 2,
+            "external_id": "47300",
+            "total": "150.0",
+            "paid": true,
+            "links": {
+              "href": "/invoice/2",
+              "rel": "self"
+            }
+          }
+        ]
 
 ### Create an Invoice [POST]
 + Request (application/json)
@@ -546,7 +561,7 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 
 + Response 201 (application/json)
 
-        { 
+        {
             "id" : 5,
             "links" : [{
                 "href" : "/invoice/5",
@@ -558,39 +573,77 @@ Updates task budgets, putting its individual budgets from order as supplied. Bud
 A single Invoice object with all its details
 
 + Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with. 
+    + id (required, number, `2`) ... Numeric `id` of the Order to perform action with.
 
 ### Retrieve an Invoice [GET]
 
 + Response 200 (application/json)
 
         {
-          "id": 5, 
-          "external_id" : "67899000000303001",
-          "paid" : false,
-          "links" : [{
-            "href" : "/invoice/5",
-            "rel"  : "self"
-          }],
+          "id": 2,
+          "total": "630.0",
+          "external_id": "67899000000424001",
+          "paid": true,
+          "links": {
+            "href": "/invoice/2",
+            "rel": "self"
+          },
           "orders": [
             {
-              "id": 15,
-              "name": "Test2",
-              "invoiced_budget": "50.0",
-              "allocatable_budget": "30.0",
-              "free_budget": "10.0",
+              "id": 1,
+              "name": "Order 1",
+              "invoiced_budget": "22.5",
+              "allocatable_budget": "10.0",
+              "free_budget": "0.0",
+              "suborder": false,
+              "paid": true,
+              "completed": false,
+              "team": {
+                "id": 2,
+                "name": "Team2",
+                "link": "/team/2"
+              },
+              "invoice": {
+                "id": 2,
+                "external_id": "67899000000424001",
+                "link": "/invoice/2"
+              },
               "links": {
-                "url": "/orders/15",
+                "url": "/order/48",
                 "rel": "self"
-                }
               }
+            },
+            {
+              "id": 153,
+              "name": "Styletribute, 24544",
+              "invoiced_budget": "11.25",
+              "allocatable_budget": "5.0",
+              "free_budget": "0.0",
+              "suborder": false,
+              "paid": true,
+              "completed": false,
+              "team": {
+                "id": 2,
+                "name": "Team2",
+                "link": "/team/2"
+              },
+              "invoice": {
+                "id": 2,
+                "external_id": "67899000000424001",
+                "link": "/invoice/2"
+              },
+              "links": {
+                "url": "/order/153",
+                "rel": "self"
+              }
+            }
           ]
         }
 
 ### Remove an Invoice [DELETE]
 + Response 200
 
-## Set paid status [/invoice/{id}/paid] 
+## Set paid status [/invoice/{id}/paid]
 
 ### Mark Invoice as paid [POST]
 
@@ -611,141 +664,212 @@ A single Invoice object with all its details
     + team (int) - Filtering by team id
 
     + sorted_by (string) - Sorting on tasks
-    
-        + Values
-        
-            + `total`
-            + `created_at`
+        + Members
+            + `total:(asc/desc)`
+            + `created_at:(asc/desc)`
 
     + search_query (string) - Search on tasks using comment as a key
+        + Members
+            + `comment`
+            + `created_on`
+            + `user` - Only explicit
+            + `account` - balance/income
+            + `accountable_id` - Owner id
+            + `accountable_type` - Owner class. Team or User
 
 
 + Response 200 (application/json)
 
         [{
-          "id": 1, ,
-          "comment": "122 Balance payment",
-          "type": "payment",
-          "total": "20.0",
+          "id": 1,
+          "total": "-30.0",
           "owner": {
-                "id": 3,
-                "type": "user"
-                "href" : "/user/3"
+            "id": 1,
+            "type": "user",
+            "name": "John Smith",
+            "href": "/user/1"
           },
-          "links" : [{
-            "href" : "/transaction/1",
-            "rel"  : "self"
-          }],
-          "date": '2015-03-26T11:17:11.000Z'
-        }, 
-         {
-          "id": 2,
-          "comment": "123",
           "type": "balance",
-          "total": "10.0",
-          "owner": {
-                "id": 3,
-                "type": "user"
-                "href" : "/user/3"
+          "comment": "Reopening issue 1",
+          "links": {
+            "href": "/transaction/1",
+            "rel": "self"
           },
-          "links" : [{
-            "href" : "/transaction/2",
-            "rel"  : "self"
-          }],
-          "date": '2015-03-26T11:17:11.000Z'
+          "date": "2015-06-09T05:53:13.000Z"
+        },
+        {
+          "id": 2,
+          "total": "-30.0",
+          "owner": {
+            "id": 1,
+            "type": "team",
+            "name": "Team1",
+            "href": "/team/1"
+          },
+          "type": "balance",
+          "comment": "Reopening issue 1",
+          "links": {
+            "href": "/transaction/2",
+            "rel": "self"
+          },
+          "date": "2015-06-09T05:53:13.000Z"
         }]
 
 ## Transaction [/transaction/{id}]
 A single Transaction object with all its details
 
 + Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with.
 
 ### Retrieve a Transaction [GET]
 
 + Response 200 (application/json)
 
         {
+          "id": 1,
+          "total": "-30.0",
+          "comment": "Reopening issue 1",
+          "owner": {
             "id": 1,
-            "timestamp": 1421333947,
-            "owner": {
-                "id": 3,
-                "type": "user"
-                "href" : "/user/3"
-            },
-            "total": "10.0",
-            "comment": "123"
+            "type": "user",
+            "name": "John Smith",
+            "href": "/user/1"
+          },
+          "timestamp": 1433829193,
+          "account": {
+            "id": 1,
+            "type": "balance"
+          }
         }
 
 
 # Group User API
 
-## User Collection [/users]
+## User Collection [/users?search=queue&sorted_by=value]
 ### List all Users [GET]
+
++ Parameters
+
+    + search (string) - Search on users
+        + Members
+            + `login`
+            + `name`
+            + `team` - Only explicit. Example: 'Team1'
+            + `role` - Only explicit. Example: 'Manager'
+
+    + sorted_by (string) - Sorting on users
+        + Members
+          + `name:(asc/desc)`
+          + `login:(asc/desc)`
+          + `daily_rate:(asc/desc)`
+
 + Response 200 (application/json)
 
         [{
+          "id": 1,
+          "name": "John Smith",
+          "login": "jsmth",
+          "team": {
             "id": 1,
-            "name": "Test",
-            "login": "usr",
-            "team": {
-                "name": "Test Team",
-                "href": "/team/1"
-            },
-            "role": "Manager",
-            "links": {
-                "href": "/user/1",
-                "rel": "self"
-            }
-        },
+            "name": "Team1",
+            "href": "/team/1"
+          },
+          "role": "Developer",
+          "links": {
+            "href": "/user/1",
+            "rel": "self"
+          },
+          "balance_account_state": -100,
+          "income_account_state": 400
+          },
         {
-            "id": 2,
-            "name": "Test",
-            "login": "usr",
-            "team": {
-                "name": "Test Team",
-                "href": "/team/1"
-            },
-            "role": "Manager",
-            "links": {
-                "href": "/user/1",
-                "rel": "self"
-            }
+          "id": 2,
+          "name": "Ivan Petrov",
+          "login": "ivpet",
+          "team": {
+            "id": 1,
+            "name": "Team1",
+            "href": "/team/1"
+          },
+          "role": "Manager",
+          "links": {
+            "href": "/user/2",
+            "rel": "self"
+          },
+          "balance_account_state": -2,
+          "income_account_state": 1034
         }]
 
 ## User [/user/{id}]
 A single User object with all its details
 
 + Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with.
 
 ### Retrieve an User [GET]
 
 + Response 200 (application/json)
 
         {
-            "id": 1,
-            "name": "Test",
-            "login": "usr",
-            "team": {
-                "name": "Test Team",
-                "href": "/team/1"
+          "id": 1,
+          "name": "John Smith",
+          "login": "jsmth",
+          "team": {
+            "name": "Team1",
+            "href": "/team/1",
+            "id": 1
+          },
+          "daily_rate": 100,
+          "role": "Developer",
+          "links": {
+            "href": "/user/1",
+            "rel": "self"
+          },
+          "accounts": {
+            "balance": {
+              "id": 1
             },
-            "daily_rate": 54.30,
-            "role": "Manager",
-            "links": {
-                "href": "/user/1",
-                "rel": "self"
-            },
-            "balance_account_state": 31.22,
-            "income__account_state": -123.12
+            "income": {
+              "id": 2
+            }
+          },
+          "balance_account_state": -100,
+          "income_account_state": 400
         }
-        
+
+## User Payment [/user/{id}/add_payment]
+### Create a payment [POST]
++ Request (application/json)
+
+        {
+          "comment" : "June salary for John Smith",
+          "total" : 1500
+        }
+
++ Response 201 (application/json)
+
+## User Bonus [/user/{id}/pay_bonus]
+### Create bonus payment [POST]
++ Request (application/json)
+
+        {
+          "bonus" : 10,
+          "income" : 5000
+        }
+
++ Response 201 (application/json)
 
 # Group Team API
 
-## Team Collection [/teams]
+## Team Collection [/teams?sorted_by=value]
 ### List all Teams [GET]
+
++ Parameters
+
+    + sorted_by (string) - Sorting on teams
+        + Members
+          + `name:(asc/desc)`
+
 + Response 200 (application/json)
 
         [{
@@ -756,7 +880,7 @@ A single User object with all its details
                 "href": "/team/1",
                 "rel": "self"
             }
-        },    
+        },
         {
             "id": 1,
             "name": "Test Team",
@@ -771,7 +895,7 @@ A single User object with all its details
 A single Team object with all its details
 
 + Parameters
-    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with. 
+    + id (required, number, `2`) ... Numeric `id` of the Transaction to perform action with.
 
 ### Retrieve an Team [GET]
 
@@ -784,35 +908,118 @@ A single Team object with all its details
             "income_account_state": -10.31
         }
 
-    
+
 # Group Status API
 
 ## Status [/status]
 
 ### Return all status resources
-
-+ Response 200 (application/json)
-
-        [{
-            "name": "Selfcheck",
-            "links": {
-                "href": "/status/selfcheck"
-            }
-        }]
-
-
-## Self-check [/status/selfcheck]
-### Run a self-check [GET]
-
 Returns a list of errors found or empty response in case everything is correct
 
 + Response 200 (application/json)
 
-        {"errors" :
-         ["Incorrect number of transactions for issue 22875",
-          "Order 623 is expected to be paid"
-         ]   
+        {"messages" :
+          [
+            {
+              "id": 1,
+              "alert": "SubOrder 1 (Super Suborder) has relationship with invoice",
+              "checked": false,
+              "created_at": "2015-06-02T07:22:39.000Z",
+              "updated_at": "2015-06-02T12:11:43.000Z"
+            },
+            {
+              "id": 2,
+              "alert": "Wrong payment & balance transactions for issue 1",
+              "checked": true,
+              "created_at": "2015-06-02T09:34:59.000Z",
+              "updated_at": "2015-06-02T10:02:29.000Z"
+            }
+          ]
         }
+
+
+
+## Check Message [/status/{id}/checked]
+### Mark message as checked [POST]
+
++ Response 200 (application/json)
+
+### Mark message as unchecked [DELETE]
+
++ Response 200 (application/json)
+
+# Group Activity API
+
+## Activity [/activity]
+
+### Return all status resources [GET]
+Returns a list of events
+
++ Response 200 (application/json)
+
+        [{
+            "id": 487,
+            "trackable_id": 7293,
+            "trackable_type": "Task",
+            "owner_id": null,
+            "owner_type": null,
+            "key": "task.budget_update",
+            "parameters": {
+              "old": [ ],
+              "new": [
+                {
+                "id": 2942,
+                "task_id": 7293,
+                "order_id": 731,
+                "budget": "150.0",
+                "created_at": "2015-06-10T12:10:31.711Z",
+                "updated_at": "2015-06-10T12:10:31.711Z"
+                }
+              ]
+            },
+            "recipient_id": null,
+            "recipient_type": null,
+            "created_at": "2015-06-10T12:10:32.000Z",
+            "updated_at": "2015-06-10T12:10:32.000Z"
+          },
+          {
+            "id": 486,
+            "trackable_id": 7293,
+            "trackable_type": "Task",
+            "owner_id": null,
+            "owner_type": null,
+            "key": "task.resolver_update",
+            "parameters": { },
+            "recipient_id": 20,
+            "recipient_type": "User",
+            "created_at": "2015-06-10T12:09:34.000Z",
+            "updated_at": "2015-06-10T12:09:34.000Z"
+          },
+          {
+            "id": 485,
+            "trackable_id": 7293,
+            "trackable_type": "Task",
+            "owner_id": null,
+            "owner_type": null,
+            "key": "task.budget_update",
+            "parameters": {
+              "old": [
+                {
+                "task_id": 7293,
+                "id": 2941,
+                "order_id": 477,
+                "budget": "150.0",
+                "created_at": "2015-06-10T12:09:13.000Z",
+                "updated_at": "2015-06-10T12:09:13.000Z"
+                }
+              ],
+              "new": [ ]
+            },
+            "recipient_id": null,
+            "recipient_type": null,
+            "created_at": "2015-06-10T12:09:23.000Z",
+            "updated_at": "2015-06-10T12:09:23.000Z"
+          }]
 
 
 
@@ -825,7 +1032,7 @@ API returns the following HTTP error codes
  - HTTP 405 Method not allowed
  - HTTP 422 Failed request
 
- 
+
 In case of error, API returns error list with descriptions, in the following format
 
 {
@@ -834,7 +1041,7 @@ In case of error, API returns error list with descriptions, in the following for
         "Allocated budget should be positive"
     ]
 }
- 
+
 
 
 
@@ -844,30 +1051,50 @@ Sorting and filtering is handled with URL query parameters which applies only fo
 
 Filtering
 
-  - ?param=value
+  - ?search=name operator value secondName operator value
+
+Operator is
+
+  - `=` (A case sensitive equality comparison for text fields, a normal equality comparison for numerical and temporal fields)
+  - `!=`, `<>` (The inverse/negation of the = operator)
+  - `~` (Case insensitive occurrence/contains search for textual fields (i.e. LIKE/ILIKE))
+  - `!~` (The inverse/negation of the ~ operator (NOT LIKE/ILIKE))
+  - `>` (Greater than. Only supported for numerical and temporal fields)
+  - `<` (Less than. Only supported for numerical and temporal fields)
+  - `>=` (Greater than or equals. Only supported for numerical and temporal fields)
+  - `=<` (Less than or equals. Only supported for numerical and temporal fields)
+
+Examples:
+
+  - `/tasks?search=paid = 1 accepted = false resolver = 'John Smith' created_at > 2015-06-10`
+  - `/users?search=name ~ 'Ivan'`
+
+If no operator is given, the query builder will determine a default operator based on the field type, i.e. ~ for textual fields, = for other field types.
 
 Value can be in
 
-  - boolean (true/false/1/0)
-  - number (integer)
+  - `boolean` (true/false/1/0)
+  - `number` (integer)
+  - `string` (text)
+  - `date` (date/time)
 
 
 Sorting is done using special parameter:
 
-  - ?sorted_by=value 
+  - `?sorted_by=value`
 
 Where value is parameter name that can be used for filtering on object and prepending suffixes _desc or _asc to parameter name.
-Where _desc/_asc stand for sorting direction, descending or ascending respectively. Default sorting direction is ascending.
+Where :desc/:asc stand for sorting direction, descending or ascending respectively. Default sorting direction is ascending.
 
 Examples:
 
-  - /orders?sorted_by=total
-  - /orders?sorted_by=free_budget_asc
-  - /tasks?sorted_by=paid_desc
+  - `/orders?sorted_by=total`
+  - `/orders?sorted_by=free_budget:asc`
+  - `/tasks?sorted_by=paid:desc`
 
-You can use multiple parameters to sort, which are applied in sequance
+You can use multiple parameters to sort, which are applied in sequence
 
-  - /tasks/?sorted_by=external_id_desc,budget_asc
+  -` /tasks/?sorted_by=external_id_desc,budget_asc`
 
 Pagination
 
@@ -876,7 +1103,7 @@ Adding parameters limit and page, one can get a subset of results. page is count
 
 Examples:
 
-  - /tasks?paid=true&limit=10&page=4   In this case results 41-50 will be on current page
+  -` /tasks?search=paid == true&limit=10&page=4`   In this case results 41-50 will be on current page
 
 
 Searching is available through parameter ?search_query=value, where value is search in a list of parameters with OR logic. List of parameters is specific for each object type (see in respective resource definitions)
