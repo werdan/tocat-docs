@@ -7,51 +7,80 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
 # Group Order API
 
 
-## Orders Collection [/orders/?paid={paid_status}&sorted_by={sorted_by}&search_query={query}]
+## Orders Collection [/orders/?sorted_by={sorted_by}&search_query={query}]
 ### List all Orders [GET]
 
 
 + Parameters
 
-    + paid (boolean) - Filtering on paid orders
-
     + sorted_by (string) - Sorting on orders
-    
-        + Values
-        
-            + `invoiced_budget`
-            + `created_at`
-            + `free_budget`
-            + `allocatable_budget`
+        + Members
+            + `invoiced_budget:(asc/desc)`
+            + `created_at:(asc/desc)`
+            + `free_budget:(asc/desc)`
+            + `allocatable_budget:(asc/desc)`
+            + `name:(asc/desc)`
+            + `description:(asc/desc)`
+
+    + search (string) - Search on orders using name or description as a key
+        + Members
             + `name`
-
-    + search_query (string) - Search on orders using name or description as a key
-
+            + `description`
+            + `invoiced_budget`
+            + `allocatable_budget`
+            + `free_budget`
+            + `paid`
+            + `completed`
+            + `team`
+            + `parent_id`
+            + `invoice_id`
 
 
 + Response 200 (application/json)
 
         [{
-          "id": 1,  
-          "name" : "SuperClient - Project X phase1",
-          "invoiced_budget": 400.00, 
-          "allocatable_budget": 400.00, 
-          "free_budget" : 400.00, 
-          "links" : [{
-            "href" : "/order/1",
-            "rel"  : "self"
-          }]
-        }, 
+          "id": 1,
+          "name": "super order",
+          "invoiced_budget": "20.0",
+          "allocatable_budget": "20.0",
+          "free_budget": "10.0",
+          "suborder": true,
+          "paid": false,
+          "completed": false,
+          "team": {
+            "id": 1,
+            "name": "Team1",
+            "link": "/team/1"
+          },
+          "invoice": { },
+          "links": {
+            "url": "/order/1",
+            "rel": "self"
+          }
+         }, 
          {
-          "id": 2,  
-          "name" : "SuperClient - Project X phase1 templating", 
-          "invoiced_budget": 400.00, 
-          "allocatable_budget": 400.00, 
-          "free_budget" : 400.00, 
-          "links" : [{
-            "href" : "/order/2",
-            "rel"  : "self"
-          }]
+          "id": 2,
+          "name": "Test!",
+          "invoiced_budget": "1504.0",
+          "allocatable_budget": "140.0",
+          "free_budget": "90.0",
+          "suborder": false,
+          "paid": false,
+          "completed": false,
+          "team": {
+            "id": 2,
+            "name": "Team2",
+            "link": "/team/2"
+          },
+          "invoice": {
+            "id": 1,
+            "external_id": "6536",
+            "link": "/invoice/1"
+          },
+          "links": {
+            "url": "/order/2",
+            "rel": "self"
+          }
         }]
 
 ### Create an Order [POST]
@@ -64,7 +93,9 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
           "description" : "This is just a test order for SuperClient",
           "team":  {
             "id" : 1
-          }
+          },
+          "parent_id": 1,
+          "invoice_id": 1
         }
 
 + Response 201 (application/json)
@@ -130,7 +161,7 @@ A single Order object with all its details
           "tasks": [
             {
               "id": 5,
-              "external_id": "TST-102",
+              "external_id": "task5",
               "links": [
                 {
                   "href": "/tasks/5",
@@ -140,20 +171,35 @@ A single Order object with all its details
                   "href": null,
                   "rel": "external"
                 }
-              ]
+              ],
+              "budget": 30,
+              "resolver": {
+                "name": "John Smith",
+                "href": "/user/1",
+                "id": 1
+              }
             }],
           "sub_orders": [
             {
-              "id": 7,
-              "name": "super order",
-              "invoiced_budget": "50.0",
-              "allocatable_budget": "50.0",
-              "free_budget": "50.0",
-              "links": {
-                "url": "/orders/7",
-                "rel": "self"
-              }
-            }
+                "id": 3,
+                "name": "super order",
+                "invoiced_budget": "20.0",
+                "allocatable_budget": "20.0",
+                "free_budget": "10.0",
+                "suborder": true,
+                "paid": false,
+                "completed": false,
+                "team": {
+                    "id": 2,
+                    "name": "Team2",
+                    "link": "/team/2"
+                },
+                "invoice": { },
+                "links": {
+                    "url": "/order/3",
+                    "rel": "self"
+                }
+                }
           ]
         }
 
@@ -187,7 +233,7 @@ Updates an order with Invoice information. You can not change invoice when order
 
 + Request (application/json)
 
-        { "id" : 1 }
+        { "invoice_id" : 1 }
 
 + Response 200
 
@@ -209,38 +255,21 @@ Set order as completed, closing it for further changes and creating transaction 
 
 ## SubOrder [/order/{id}/suborder]
 
-### Get the list of suborders [GET]
-
-+ Response 200
-
-        [{
-          "id": 3,  
-          "name" : "SuperClient - Project Y phase2 system administration",
-          "links" : [{
-            "href" : "/order/3",
-            "rel"  : "self"
-          }]
-        }, 
-         {
-          "id": 4,  
-          "name" : "SuperClient - Project X phase1 templating",
-          "links" : [{
-            "href" : "/order/4",
-            "rel"  : "self"
-          }]
-        }]        
-       
        
 ### Create SubOrder aka Split order [POST]
 
 + Request (application/json)
 
         {
-            "allocated_budget" : 100,
-            "name" : "SubOrder on SuperClient phase2",
-            "team" : {
-                "id" : 4
-            }
+          "invoiced_budget": 150.00, 
+          "allocatable_budget": 60.00, 
+          "name" : "SuperClient - Project X phase1", 
+          "description" : "This is just a test order for SuperClient",
+          "team":  {
+            "id" : 1
+          },
+          "parent_id": 1,
+          "invoice_id": 1
         }
 
 + Response 201
