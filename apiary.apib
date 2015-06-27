@@ -455,6 +455,18 @@ A single Task object with all its details
 
 + Response 200
 
+## Task Review [/task/{id}/review]
+
+### Set review_requested flag in Task [POST, PUT]
+
+
++ Response 200
+
+### Remove review_requested flag from Task [DELETE]
+
++ Response 200
+
+
 ## Task Budget [/task/{id}/budget]
 
 ### Set budget in Task [POST, PUT]
@@ -1043,7 +1055,9 @@ In case of error, API returns error list with descriptions, in the following for
 }
 
 
-
+# Group EVENTS OWNER
+For every action on every object server creates events records.
+Every event record can contain owner relationship. Client can specify owner by passing owners name in current_user query param.
 
 # Group SORTING AND FILTERING
 
