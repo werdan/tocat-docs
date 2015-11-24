@@ -786,12 +786,16 @@ A single Transaction object with all its details
             "name": "Team1",
             "href": "/team/1"
           },
-          "role": "Developer",
+          "role": {
+            "id" : 2,
+            "name" : "Developer"
+          },
           "links": {
             "href": "/user/1",
             "rel": "self"
           },
           "balance_account_state": -100,
+          "active" : true,
           "income_account_state": 400
           },
         {
@@ -803,14 +807,61 @@ A single Transaction object with all its details
             "name": "Team1",
             "href": "/team/1"
           },
-          "role": "Manager",
+          "role": {
+            "id" : 1,
+            "name" : "Manager"}
           "links": {
             "href": "/user/2",
             "rel": "self"
           },
           "balance_account_state": -2,
+          "active" : true,
           "income_account_state": 1034
         }]
+
+### Create an User [POST]
++ Request (application/json)
+
+        "user" :
+        {
+          "name" : "John Smith"
+          "login" : "jsmth"
+          "daily_rate" : "55.30"
+          "team":  1,
+          "role": 1,
+        }
+
++ Response 201 (application/json)
+
+        {
+          "id": 1,
+          "name": "John Smith",
+          "login": "jsmth",
+          "team": {
+            "name": "Team1",
+            "href": "/team/1",
+            "id": 1
+          },
+          "daily_rate": 55.30,
+          "role": {
+            "id": 1
+            "name": "Manager",
+          },
+          "links": {
+            "href": "/user/1",
+            "rel": "self"
+          },
+          "accounts": {
+            "balance": {
+              "id": 1
+            },
+            "income": {
+              "id": 2
+            }
+          },
+          "balance_account_state": -100,
+          "income_account_state": 400
+        }
 
 ## User [/user/{id}]
 A single User object with all its details
@@ -832,7 +883,10 @@ A single User object with all its details
             "id": 1
           },
           "daily_rate": 100,
-          "role": "Developer",
+          "role": {
+            "id": 1
+            "name": "Manager",
+          },
           "links": {
             "href": "/user/1",
             "rel": "self"
@@ -848,6 +902,58 @@ A single User object with all its details
           "balance_account_state": -100,
           "income_account_state": 400
         }
+
+
+### Update an User [POST]
+
++ Request (application/json)
+
+        "user" :
+        {
+          "name" : "John Smith"
+          "login" : "johnsmith"
+          "daily_rate" : "99.30"
+          "team":  2,
+          "role": 1,
+        }
+
++ Response 200 (application/json)
+
+        {
+          "id": 1,
+          "name": "John Smith",
+          "login": "johnsmith",
+          "team": {
+            "name": "Team2",
+            "href": "/team/2",
+            "id": 2
+          },
+          "daily_rate": 99.30,
+          "role": {
+            "id": 1
+            "name": "Manager",
+          },
+          "links": {
+            "href": "/user/1",
+            "rel": "self"
+          },
+          "accounts": {
+            "balance": {
+              "id": 1
+            },
+            "income": {
+              "id": 2
+            }
+          },
+          "balance_account_state": -100,
+          "income_account_state": 400
+        }
+        
+
+### Remove User [DELETE]
+
++ Response 200 (application/json)
+
 
 ## User Payment [/user/{id}/add_payment]
 ### Create a payment [POST]
@@ -870,6 +976,20 @@ A single User object with all its details
         }
 
 + Response 201 (application/json)
+
+## Roles Collection [/roles]
+### List all Roles [GET]
+
++ Response 200 (application/json)
+
+        [{
+            "id": 1,
+            "name": "Manager"
+        },
+        {
+            "id": 2,
+            "name": "Developer"
+        }]        
 
 # Group Team API
 
