@@ -31,9 +31,11 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
           + `free_budget`
           + `paid`
           + `completed`
+          + `internal_order
           + `team` - Only explicit search.
           + `parent_id` - Only explicit search.
           + `invoice_id` - Only explicit search.
+
 
 
 + Response 200 (application/json)
@@ -47,6 +49,7 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
           "suborder": true,
           "paid": false,
           "completed": false,
+          "internal_order": false,
           "team": {
             "id": 1,
             "name": "Team1",
@@ -67,6 +70,7 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
           "suborder": false,
           "paid": false,
           "completed": false,
+          "internal_order": false,
           "team": {
             "id": 2,
             "name": "Team2",
@@ -128,6 +132,8 @@ A single Order object with all its details
           "description" : "This is a SubOrder for templating work done in Team2",
           "paid" : false,
           "completed" : false,
+          "internal_order": false,
+          "commission": 40
           "parent_order" : {
             "id"   : 1,
             "href" : "/order/1"
@@ -224,6 +230,24 @@ To update an Order send a JSON with updated value for one or more of the Order r
 
 + Response 200
 
+## Internal flag for order [/order/{id}/internal]
+### Remove internal flag from order [DELETE]
++ Response 200
+
+### Set internal flag to order [POST]
++ Response 200
+
+## Set commission for order [/order/{id}/commission]
+### Set commission for order [POST]
+
++ Request (application/json)
+
+        {
+                "commission" : 40
+        }
+
++ Response 200
+
 
 ## Invoice relation [/order/{id}/invoice]
 Updates an order with Invoice information. You can not change invoice when order is set as paid or completed.
@@ -246,10 +270,6 @@ Updates an order with Invoice information. You can not change invoice when order
 Set order as completed, closing it for further changes and creating transaction in team income account
 
 ### Complete order [POST]
-
-+ Response 200
-
-### Uncomplete order [DELETE]
 
 + Response 200
 
@@ -310,6 +330,7 @@ Set order as completed, closing it for further changes and creating transaction 
           "external_id": "50993",
           "accepted": true,
           "paid": false,
+          "expenses" : false,
           "links": [
             {
               "href": "/task/1",
@@ -385,6 +406,7 @@ A single Task object with all its details
           "paid": false,
           "accepted": true,
           "resolver": { },
+          "expenses": false,
           "links": [
             {
               "href": "/task/1",
@@ -438,6 +460,15 @@ A single Task object with all its details
 
 + Response 200
 
+## Expenses flag for Task [/task/id/expenses]
+
+### Set expenses flag for Task [POST]
+
++ Response 200
+
+### Remove expenses flag from task [DELETE]
+
++ Response 200
 
 ## Task Resolver [/task/{id}/resolver]
 
@@ -962,17 +993,6 @@ A single User object with all its details
         {
           "comment" : "June salary for John Smith",
           "total" : 1500
-        }
-
-+ Response 201 (application/json)
-
-## User Bonus [/user/{id}/pay_bonus]
-### Create bonus payment [POST]
-+ Request (application/json)
-
-        {
-          "bonus" : 10,
-          "income" : 5000
         }
 
 + Response 201 (application/json)
