@@ -317,6 +317,7 @@ Set order as completed, closing it for further changes and creating transaction 
             + `paid`
             + `resolver`
             + `order`
+            + 'external_id'
         
     + sorted_by (string) - Sorting on tasks
         + Members
@@ -349,6 +350,18 @@ Set order as completed, closing it for further changes and creating transaction 
           "external_id": "9827",
           "accepted": true,
           "paid": false,
+          "orders": 
+            [
+                {
+                    "id":1,
+                    "budget":"10.0"
+                }
+            ]
+          "potential_resolvers":[
+            {
+              "id":1,"login":"abcd","name":"Some User"
+            }
+          ],
           "links": [
             {
               "href": "/task/7834",
