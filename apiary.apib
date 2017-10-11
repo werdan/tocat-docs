@@ -9,12 +9,50 @@ TOCAT is management operational tool that coordinates enterprise value chain fro
 ## Current User ACL [/acl]
 ### Current User ACL [GET]
 
+
+
 + Response 200 (application/json)
 
         [
-            "can_create_orders",
-            "can_view_issues
-        ]
+         "create_orders",
+         "show_orders",
+         "edit_orders",
+         "destroy_orders",
+         "complete_orders",
+         "uncomplete_orders",
+         "set_internal_orders",
+         "remove_internal_orders",
+         "show_commission",
+         "update_commission",
+         "create_invoices",
+         "show_invoices",
+         "destroy_invoices",
+         "paid_invoices",
+         "modify_accepted",  /*  user can request "Accept Task" (setting or removing accept flag) */
+         "modify_resolver", /* user can change 'Resolver' (setting or removing resolver of the task) */
+         "modify_budgets", /* user can add/remove orders to task, change budget */
+         "show_budgets", /* user can see orders connected to the task */
+         "show_issues",  /* user can see list of tasks (also - list of teams, users) */
+         "show_aggregated_info", /* user can see tocat data (budget, resolver, orders) of the task */
+         "can_request_review", /* user can request review of the task */
+         "can_review_task", /* user can review the task */
+         "set_expenses",  /* user can set 'expenses' flag of the task */
+         "show_transactions", 
+         "create_transactions",
+         "show_tocat_page",
+         "has_protected_page",
+         "can_see_public_pages",
+         "is_admin",
+         "show_status_page",
+         "mark_alerts_as_checked",
+         "show_activity_feed",
+         "create_user",
+         "update_user",
+         "activate_user",
+         "deactivate_user"
+         ]
+
+
 
 
 # Group Order API
@@ -476,7 +514,7 @@ A single Task object with all its details
         }
 
 
-## Accept an Task [/task/{id}/accept]
+## Accept Task [/task/{id}/accept]
 
 ### Set accepted status in Task [POST, PUT]
 
@@ -814,6 +852,41 @@ A single Transaction object with all its details
 
 # Group User API
 
+## Current User [/users/me]
+### Show current user [GET]
+
++ Response 200 (application/json)
+ 
+        {
+          "id": 1,
+          "name": "John Smith",
+          "login": "jsmth",
+          "team": {
+            "name": "Team1",
+            "href": "/team/1",
+            "id": 1
+          },
+          "daily_rate": 100,
+          "role": {
+            "id": 1
+            "name": "Manager",
+          },
+          "links": {
+            "href": "/user/1",
+            "rel": "self"
+          },
+          "accounts": {
+            "balance": {
+              "id": 1
+            },
+            "income": {
+              "id": 2
+            }
+          },
+          "balance_account_state": -100,
+          "income_account_state": 400
+        }
+
 ## User Collection [/users?search=queue&sorted_by=value]
 ### List all Users [GET]
 
@@ -1125,6 +1198,66 @@ Returns a list of errors found or empty response in case everything is correct
 ### Mark message as unchecked [DELETE]
 
 + Response 200 (application/json)
+
+# Group Timelog API
+
+## Timelog [/timelog/?date_start=2016-05-05&date_end=2016-05-06]
+
+### Return all timelogs for current user [GET]
+
++ Parameters
+    + date_start (string) - Start date
+    + date_end (string) - End date
+
++ Response 200 (application/json)
+
+        {
+        "result" :
+            [{
+                "work_date": "2016-05-05",
+                "hours"    : 0.7
+            },
+            {
+                "work_date": "2016-05-06",
+                "hours"    : 1.5
+            }]
+        }
+
+
+### Add day-level information [POST]
+
++ Parameters
+    + `date` (string) - date
+    + `percentage` (float) - possible values are 0.25, 0.5, 1.0 This is applicable only for leave_type='working'
+    + `leave_type` (string) - working,unpaid, sick_paid
+    
++ Request (application/json)
+
+        {
+          "date" : "2016-05-05"
+          "percentage" : 0.5
+          "leave_type" : "working"
+        }
+
+
+## Detailed timelog [/timelog/2016-05-06/]
+### Return details on task level for date and current user [GET]
+
++ Response 200 (application/json)
+
+        {
+        "result" :
+            [{
+                "issue_key": "JUST-10",
+                "hours"    : 0.7
+            },
+            {
+                "issue_key": "BOODMO-12345",
+                "hours"    : 1.5
+            }]
+        }
+
+
 
 # Group Activity API
 
