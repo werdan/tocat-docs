@@ -1201,13 +1201,14 @@ Returns a list of errors found or empty response in case everything is correct
 
 # Group Timelog API
 
-## Timelog [/timelog/?date_start=2016-05-05&date_end=2016-05-06]
+## Timelog [/timelog/?date_start=2016-05-05&date_end=2016-05-06&users=ansam,alsan,dekul]
 
-### Return all timelogs for current user [GET]
+### Return timelogs for selected users [GET]
 
 + Parameters
     + date_start (string) - Start date
     + date_end (string) - End date
+    + users (string) - comma separated list of logins
 
 + Response 200 (application/json)
 
@@ -1220,6 +1221,11 @@ Returns a list of errors found or empty response in case everything is correct
             {
                 "work_date": "2016-05-06",
                 "hours"    : 1.5
+            },
+            {
+                "work_date": "2016-05-06",
+                "hours"    : 2,
+                "leave_type"     : "sick_paid"
             }]
         }
 
@@ -1234,11 +1240,13 @@ Returns a list of errors found or empty response in case everything is correct
 + Request (application/json)
 
         {
-          "date" : "2016-05-05"
-          "percentage" : 0.5
+          "date" : "2016-05-05",
+          "percentage" : 0.5,
           "leave_type" : "working"
         }
-
+        
++ Response 200
++ Response 402
 
 ## Detailed timelog [/timelog/2016-05-06/]
 ### Return details on task level for date and current user [GET]
@@ -1246,7 +1254,11 @@ Returns a list of errors found or empty response in case everything is correct
 + Response 200 (application/json)
 
         {
-        "result" :
+        "day_level": {
+                "percentage" : 0.5,
+                "leave_type" : "working"
+         },
+        "issues" :
             [{
                 "issue_key": "JUST-10",
                 "hours"    : 0.7
